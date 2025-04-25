@@ -1,0 +1,15 @@
+.app-footer {
+    position: fixed; /* Hace que el footer se quede fijo arriba al hacer scroll */
+    bottom: 0; /* Lo posiciona en la parte de abajo */
+    left: 0; /* Lo estira hacia el borde izquierdo */
+    right: 0; /* Lo estira hacia el borde derecho */
+    height: 15px; /* Altura del footer */
+    background-color: #0077b6; /* Color de fondo azul */
+    color: white; /* Color del texto blanco */
+    display: flex; /* Activa Flexbox para alinear hijos en fila por defecto (logo y texto) */
+    align-items: center; /* Centra verticalmente los elementos dentro del footer */
+    justify-content: center; /* Alinea el contenido en el centro */
+    font-size: 0.7rem; /* Tamaño de fuente */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil para dar profundidad */
+    z-index: 1000; /* Prioridad de apilamiento (por si hay otros elementos encima) */
+}

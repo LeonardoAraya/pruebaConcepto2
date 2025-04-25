@@ -1,0 +1,46 @@
+.table-container {
+    overflow-x: auto; /* Permite scroll horizontal */
+    width: 100%;     /* Ocupa todo el ancho del contenedor padre */
+}
+
+.table { /* clase para dar estilo a la tabla */
+    width: 100%; /* ancho fijo */
+    margin: 0 auto; /* centra horizontal */
+    border-collapse: collapse; /* separa las celdas en columnas */
+    table-layout: fixed; /* importante para anchos fijos */
+    margin-top: 20px; /* espacio arriba */
+}
+
+.table th, /* encabezados de la tabla y celdas */
+.table td {
+    border: 1px solid #000000; /* bordes de la celda */
+    padding: 8px; /* espacio interno */
+    text-align: center; /* alinea el texto centrado */
+}
+
+.table th { /* encabezados de la tabla */
+    background-color: #0077b6; /* color de fondo del encabezado */
+    color:white; /* color del texto */
+}
+
+.table th:nth-child(2),
+.table th:nth-child(3),
+.table th:nth-child(4),
+.table th:nth-child(5),
+.table th:nth-child(6),
+.table td:nth-child(2),
+.table td:nth-child(3),
+.table td:nth-child(4),
+.table td:nth-child(5),
+.table td:nth-child(6) {
+    width: 16%; /* Ajuste proporcional */
+}
+
+.table td:nth-child(1),
+.table td:nth-child(2),
+.table td:nth-child(3),
+.table td:nth-child(4),
+.table td:nth-child(5),
+.table td:nth-child(6) {
+    background-color: #ffffff; /* Color de fondo del encabezado */
+}

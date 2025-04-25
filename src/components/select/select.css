@@ -1,0 +1,20 @@
+.custom-select {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.custom-select label { /*label de la select, lo que sale arriba del select */
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.custom-select select { /*select del select */
+    padding: 0.5rem;
+    border-radius: 4px;
+    background-color: #dee7f3; /* color de fondo del select */
+    color: black; /* color del texto del select */
+    border: 0.5px solid black; /* borde del select */
+    font-size: 1rem; /* tamaño del texto del select */
+}

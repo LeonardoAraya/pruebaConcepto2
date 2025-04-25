@@ -1,0 +1,130 @@
+import { Request, Response } from 'express'; //Importa las librerías de Express (Request: solicitud al servidor, Response: respuesta al servidor)
+import { sql, poolPromise } from '../db/db'; //Importa la conexión a la base de datos de Azure
+
+export async function getEmpleados(req: Request, res: Response) {
+    try {
+        const pool = await poolPromise; // Obtener la conexión a la base de datos
+        const result = await pool.request().execute('SP_ObtenerEmpleadoPorNombre'); //Ejecuta la consulta SQL (Stored Procedure)
+        res.json(result.recordset); // Devuelve la respuesta
+    } catch (error) {
+        console.error('Error al obtener empleados:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+}
+
+export async function getEmpleadoPorId(req: Request, res: Response) {
+    const { id } = req.params; //obtener el id del empleado
+    try {
+        const pool = await poolPromise; // Obtener la conexión a la base de datos
+        const result = await pool.request()
+        .input('inIdEmpleado', sql.Int, id)
+        .input('inUsername', sql.VarChar(64), 'sistema')
+        .execute('SP_FiltrarEmpleadoPorId'); //Ejecuta la consulta SQL (Stored Procedure)
+
+        console.log(result.recordset);
+
+        res.json(result.recordset[0]);
+    } catch (error) {
+        console.error('Error al obtener empleado por ID:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+}
+
+export async function getPuestos(req: Request, res: Response) {
+    try {
+        const pool = await poolPromise; // Obtener la conexión a la base de datos
+        const result = await pool.request().execute('SP_ObtenerPuestos'); //Ejecuta la consulta SQL (Stored Procedure)
+        res.json(result.recordset); // Devuelve la respuesta
+    } catch (error) {
+        console.error('Error al obtener puestos:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+}
+
+export async function crearEmpleado(req: Request, res: Response) {
+    console.log('Creando empleado...');
+    try {
+        const { //parámetros que se van a insertar
+            idPuesto,
+            valorDocumentoIdentidad,
+            nombre,
+            fechaContratacion,
+            saldoVacaciones,
+            activo
+        } = req.body;
+
+        const pool = await poolPromise; // Obtener la conexión a la base de datos
+        const result = await pool.request()
+            .input('inIdPuesto', sql.Int, idPuesto)
+            .input('inValorDocumentoIdentidad', sql.VarChar(64), valorDocumentoIdentidad)
+            .input('inNombre', sql.VarChar(64), nombre)
+            .input('inFechaContratacion', sql.Date, fechaContratacion)
+            .input('inSaldoVacaciones', sql.Decimal(12, 2), saldoVacaciones)
+            .input('inActivo', sql.VarChar(4), activo)
+            .input('inUsername', sql.VarChar(64), 'sistema')
+            .execute('SP_InsertarEmpleado'); //Ejecuta la consulta SQL (Stored Procedure)
+            console.log('Resultado de la inserción:', result);
+
+
+        res.status(201).json({ mensaje: 'Empleado creado correctamente', resultado: result.recordset });
+    } catch (error) {
+        console.error('Error al insertar empleado:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+}
+
+export async function actualizarEmpleado(req: Request, res: Response) {
+    const { id } = req.params; //obtener el id del empleado, 
+    const { //parámetros que se pueden editar
+        idPuesto,
+        valorDocumentoIdentidad,
+        nombre,
+        fechaContratacion,
+        saldoVacaciones,
+        activo
+    } = req.body;
+
+    try {
+        const pool = await poolPromise; // Obtener la conexión a la base de datos
+        await pool.request()
+            .input('inIdEmpleado', sql.Int, parseInt(id))
+            .input('inIdPuesto', sql.Int, idPuesto)
+            .input('inValorDocumentoIdentidad', sql.VarChar(64), valorDocumentoIdentidad)
+            .input('inNombre', sql.VarChar(64), nombre)
+            .input('inFechaContratacion', sql.Date, fechaContratacion)
+            .input('inSaldoVacaciones', sql.Decimal(12, 2), saldoVacaciones)
+            .input('inActivo', sql.VarChar(4), activo)
+            .input('inUsername', sql.VarChar(64), 'sistema')
+            .execute('SP_ActualizarEmpleadoPorID'); 
+
+        res.status(200).json({ mensaje: 'Empleado actualizado correctamente' });
+    } catch (error) {
+        console.error('Error al actualizar empleado:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+}
+
+export async function eliminarEmpleado(req: Request, res: Response) {
+    const { id } = req.params; //obtener el id del empleado
+    const { nombre } = req.query;
+
+    try {
+        const pool = await poolPromise; // Obtener la conexión a la base de datos
+        await pool.request()
+            .input('inIdEmpleado', sql.Int, id)
+            .input('inNombre', sql.VarChar(64), nombre)
+            .input('inUsername', sql.VarChar(64), 'sistema')
+            .execute('SP_BorrarEmpleado');
+
+        res.status(200).json({ mensaje: 'Empleado eliminado' });
+    } catch (error) {
+        console.error('Error al eliminar empleado:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+}
+
+
+
+
+
+

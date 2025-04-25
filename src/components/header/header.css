@@ -1,0 +1,35 @@
+.app-header {
+    display: flex; /* Activa Flexbox para alinear hijos en fila por defecto (logo y texto) */
+    justify-content: space-between; /* Logo a la izquierda, texto a la derecha */
+    align-items: center; /* Centra verticalmente los elementos dentro del header */
+    padding: 10px 20px; /* Espaciado interno arriba/abajo: 10px, izquierda/derecha: 20px */
+    background-color: #0077b6; /* Color de fondo azul */
+    color: white; /* Color del texto blanco */
+    position: fixed; /* Hace que el header se quede fijo arriba al hacer scroll */
+    top: 0; /* Lo posiciona en la parte superior */
+    left: 0; /* Lo estira desde el borde izquierdo */
+    right: 0; /* Lo estira hasta el borde derecho */
+    height: 60px; /* Altura del header */
+    z-index: 1000; /* Prioridad de apilamiento (por si hay otros elementos encima) */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil para dar profundidad */
+}
+
+.logo {
+    cursor: pointer; /* Cambia el cursor a "mano" al pasar por encima */
+    display: flex; /* Alinea el contenido (como imagen + texto, si hubiera) en fila */
+    align-items: center; /* Centra el contenido verticalmente */
+}
+
+
+.logo-img {
+    height: 40px; /* Altura fija de la imagen del logo */
+    width: auto; /* El ancho se ajusta automáticamente para mantener proporción */
+    margin-right: 10px; /* Espacio a la derecha de la imagen (antes del texto, si hubiera) */
+    object-fit: contain; /* La imagen se escala para caber sin recortarse ni deformarse */
+}
+
+
+.tagline {
+    font-style: italic; /* El texto se muestra en cursiva */
+    font-size: 1.2rem; /* Tamaño de fuente relativo (1.2 veces el tamaño base del navegador) */
+}
