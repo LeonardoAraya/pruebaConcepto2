@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'; //importar desde React los hooks
 import { useNavigate } from 'react-router-dom'; //hook que se usa para navegar entre rutas programáticamente
 import { Input, Header, Footer, Button, Select } from '../components'; //import componente Input
+import Swal from 'sweetalert2';
 
 import logo from '../assets/home.png'; //import imagen del logo
 
@@ -28,14 +29,14 @@ export const CrearEmpleado = () => {
             .catch(err => console.error('Error al cargar puestos:', err));
     }, []); //useEffect se ejecuta una vez cuando se monta la página, recoge todos los puestos
 
-    const handleSubmit = async (e: React.FormEvent) => { //(e: React.FormEvent) se usa cuando se hace una función de envío de un formulario
-        e.preventDefault(); //e (evento) evita que se recargue la página
-
-        const formatDate = (str: string) => { //formato correcto de la fecha en UTC
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+    
+        const formatDate = (str: string) => {
             const date = new Date(str);
             return date.toISOString().split("T")[0];
         };
-
+    
         const empleado = {
             idPuesto: parseInt(idPuesto),
             valorDocumentoIdentidad: valorDocumentoIdentity,
@@ -45,23 +46,35 @@ export const CrearEmpleado = () => {
             activo: activo,
             username: 'sistema'
         };
-
-        try { //intento de insertar empleado
+    
+        try {
             const res = await fetch('http://localhost:5000/api/empleados', {
-                method: 'POST', //metodo de envío
-                headers: { 'Content-Type': 'application/json' }, //formato JSON
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(empleado)
             });
-
-            if (!res.ok) throw new Error(await res.text());
-
-            alert('Empleado insertado correctamente');
+    
+            if (!res.ok) {
+                const errorResponse = await res.json(); // Lee el error desde el response JSON
+                throw new Error(errorResponse.error); // Lanza el error con el mensaje del backend
+            }
+    
+            Swal.fire({
+                title: "Éxito",
+                text: "Empleado insertado correctamente",
+                icon: "success"
+            });
             navigate('/empleados');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error al insertar empleado:', error);
-            alert('Error al insertar empleado');
+            Swal.fire({
+                title: "Error",
+                text: error.message, // Muestra el mensaje detallado del backend
+                icon: "error"
+            });
         }
     };
+
     return (
         <>
             <Header textRight="Prueba Concepto 2" logoSrc={logo} logoLink="/empleados" />
@@ -74,6 +87,7 @@ export const CrearEmpleado = () => {
                             value={nombre}
                             onChange={(e) => setNombre(e.target.value)}
                             placeholder="Ej: Juan Pérez"
+                            isRequired = {true}
                         />
                     </label>
 
@@ -82,6 +96,7 @@ export const CrearEmpleado = () => {
                             value={valorDocumentoIdentity}
                             onChange={(e) => setValorDocumentoIdentity(e.target.value)}
                             placeholder="Ej: 123456789"
+                            isRequired = {true}
                         />
                     </label>
 
@@ -90,6 +105,7 @@ export const CrearEmpleado = () => {
                             value={fechaContratacion}
                             onChange={(e) => setFechaContratacion(e.target.value)}
                             type="date"
+                            isRequired = {true}
                         />
                     </label>
 
@@ -99,6 +115,7 @@ export const CrearEmpleado = () => {
                             onChange={(e) => setSaldoVacaciones(e.target.value)}
                             placeholder="Ej: 12.5"
                             type="number"
+                            isRequired = {true}
                         />
                     </label>
 

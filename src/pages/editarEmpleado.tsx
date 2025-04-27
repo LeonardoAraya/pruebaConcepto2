@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'; //importar desde React los hooks
 import { useParams } from 'react-router-dom'; //hook que se usa para obtener parámetros dinámicos de la ruta de la URL
 import { useNavigate } from 'react-router-dom'; //hook que se usa para navegar entre rutas programáticamente
 import { Input, Header, Footer, Button, Select } from '../components'; //import componente Input
+import Swal from 'sweetalert2';
 
 import logo from '../assets/home.png'; //import imagen del logo
 
@@ -32,7 +33,8 @@ export const EditarEmpleado = () => {
                 setNombre(data.nombre);
                 setFechaContratacion(data.fecha_contratacion.split('T')[0]); // solo fecha
                 setSaldoVacaciones(String(data.saldo_vacaciones));
-                setActivo(data.activo);})
+                setActivo(data.activo);
+            })
             .catch(err => console.error('Error al obtener empleado:', err));
     }, [id]);
 
@@ -63,18 +65,29 @@ export const EditarEmpleado = () => {
 
         try { //intento de insertar empleado
             const res = await fetch(`http://localhost:5000/api/empleados/${id}`, {
-                method: 'PUT',              
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' }, //formato JSON
                 body: JSON.stringify(empleado)
             });
 
-            if (!res.ok) throw new Error(await res.text());
+            if (!res.ok) {
+                const errorResponse = await res.json(); // Lee el error desde el response JSON
+                throw new Error(errorResponse.error); // Lanza el error con el mensaje del backend
+            }
 
-            alert('Empleado modificado correctamente');
+            Swal.fire({
+                title: "Éxito",
+                text: "Empleado insertado correctamente",
+                icon: "success"
+            });
             navigate('/empleados');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error al editar empleado:', error);
-            alert('Error al editar empleado');
+            Swal.fire({
+                title: "Error",
+                text: error.message, // Muestra el mensaje detallado del backend
+                icon: "error"
+            });
         }
     };
     return (
@@ -89,6 +102,7 @@ export const EditarEmpleado = () => {
                             value={nombre}
                             onChange={(e) => setNombre(e.target.value)}
                             placeholder="Ej: Juan Pérez"
+                            isRequired={true}
                         />
                     </label>
 
@@ -97,26 +111,27 @@ export const EditarEmpleado = () => {
                             value={valorDocumentoIdentity}
                             onChange={(e) => setValorDocumentoIdentity(e.target.value)}
                             placeholder="Ej: 123456789"
+                            isRequired={true}
                         />
                     </label>
-                    
+
                     <label>Activo:
-                    <Select value={activo} onChange={(e) => setActivo(e.target.value)}
-                        options={[
-                            { value: 'SI', label: 'Sí' }, //Value es el valor que se guarda, label es el que se muestra
-                            { value: 'NO', label: 'No' }
-                        ]}
-                        required
+                        <Select value={activo} onChange={(e) => setActivo(e.target.value)}
+                            options={[
+                                { value: '1', label: 'Sí' }, //Value es el valor que se guarda, label es el que se muestra
+                                { value: '2', label: 'No' }
+                            ]}
+                            required
                         />
                     </label>
 
                     <label>Puesto:
-                    <Select value={idPuesto} onChange={(e) => setIdPuesto(e.target.value)}
-                        options={puestos.map(p => ({
-                            value: p.id_puesto, /* Lo que se guarda es el id del puesto */
-                            label: p.nombre /* El label es el nombre del puesto */
-                        }))}
-                        required
+                        <Select value={idPuesto} onChange={(e) => setIdPuesto(e.target.value)}
+                            options={puestos.map(p => ({
+                                value: p.id_puesto, /* Lo que se guarda es el id del puesto */
+                                label: p.nombre /* El label es el nombre del puesto */
+                            }))}
+                            required
                         />
                     </label>
 

@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'; //crear app Express (frame
 const cors = require('cors'); //permite la comunicación entre puertos
 const path = require('path');  //construir rutas de archivos
 const empleadosRoutes = require('./routes/empleados.routes'); //rutas de la API de proyectos
+const loginRoutes = require('./routes/login.routes'); //rutas de la API de proyectos
 
 
 
@@ -16,6 +17,7 @@ app.use(express.static(path.join(__dirname, '..', 'src', 'assets'))); //ruta de 
 
 // Rutas de API
 app.use('/api/empleados', empleadosRoutes); //ruta de la API de empleados
+app.use('/api/login', loginRoutes); //ruta de la API de login
 
 // Rutas HTML
 app.get('/', (req: Request, res: Response) => {

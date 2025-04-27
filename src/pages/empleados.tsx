@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Button, Footer, Header } from '../components';
+import { Table, Button, Footer, Header, Input } from '../components';
 import Swal from 'sweetalert2';
 
 
@@ -18,6 +18,7 @@ interface Empleado { //definir la interfaz de Empleado, los mismos que se obtien
 
 export const Empleados = () => {
     const [empleados, setEmpleados] = useState<Empleado[]>([]);
+    const [filtro, setFiltro] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -69,6 +70,37 @@ export const Empleados = () => {
         }
     };
 
+    const handleFiltrar = async () => {
+        if (!filtro.trim()) {
+            fetch('http://localhost:5000/api/empleados') //llamar a la API de empleados
+            .then(response => response.json()) //convertir a JSON
+            .then(data => setEmpleados(data)) //almacenar en la variable empleados
+            .catch(error => console.error('Error al obtener empleados:', error));
+            return;
+        }
+    
+        const soloNumeros = /^[0-9]+$/.test(filtro.trim()); // Validar si es numérico (solo dígitos)
+    
+        try {
+            let url = '';
+    
+            if (soloNumeros) { //si solo son números, filtrar por id
+                url = `http://localhost:5000/api/empleados/filtrarPorId/${filtro}`;
+            } else { //si no son números, filtrar por nombre
+                url = `http://localhost:5000/api/empleados/filtrarPorNombre/${encodeURIComponent(filtro)}`;
+            }
+    
+            const res = await fetch(url); //hacer fetch a la API
+            if (!res.ok) throw new Error(await res.text());
+    
+            const data = await res.json();
+            setEmpleados(data);
+        } catch (error) {
+            console.error('Error al filtrar empleados:', error);
+            Swal.fire('Error', 'Ocurrió un error al filtrar empleados.', 'error');
+        }
+    };
+    
 
     return (
         <>
@@ -76,13 +108,30 @@ export const Empleados = () => {
             <Footer text="© 2025 Todos los derechos reservados" />
             <div className='abajo-header'>
                 <h2>Empleados</h2>
+                <div className="boton-crear">
+                    <Button label="Crear empleado" parentMethod={() => navigate(`/empleado/crear_empleado`)} className="boton-verde" />
+                </div>
+            </div>
+            <div className="filtro-container">
+                    <div >
+                        <Input
+                            value={filtro}
+                            onChange={(e) => setFiltro(e.target.value)}
+                            placeholder="Buscar por nombre o documento"
+                        />
+                    </div>
+                    <div style={{ marginRight: '8rem' }}>
+                        <Button 
+                            label="Filtrar" 
+                            parentMethod={handleFiltrar}
+                            className="boton-verde"
+                        />
+                    </div>
+                    
             </div>
             <div className="container">
                 <div className="table-container">
                     <Table headers={headers} rows={rows} />
-                </div>
-                <div className="boton-crear">
-                    <Button label="Crear empleado" parentMethod={() => navigate(`/empleado/crear_empleado`)} className="boton-verde" />
                 </div>
             </div>
         </>
