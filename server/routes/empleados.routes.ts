@@ -1,11 +1,13 @@
 import { Router } from 'express'; // Importo el módulo de Express
-import { getEmpleados, getEmpleadoPorId, getPuestos, crearEmpleado, actualizarEmpleado, eliminarEmpleado, filtrarEmpleadoPorCedula, filtrarEmpleadoPorNombre} from '../controllers/empleados.controller';
+import { getEmpleados, getEmpleadoPorId, getPuestos, crearEmpleado, actualizarEmpleado, eliminarEmpleado, filtrarEmpleadoPorCedula, filtrarEmpleadoPorNombre, listarMovimientosEmpleado} from '../controllers/empleados.controller';
 
 const router = Router(); //crear el router
 
 router.get('/', getEmpleados); //crear ruta GET, / representa el inicio, en este caso /api/empleados
 router.get('/puestos', getPuestos); //crear ruta GET, / representa el inicio, en este caso /api/empleados
 router.get('/:id', getEmpleadoPorId); //crear ruta GET, / representa el inicio, en este caso /api/empleados
+router.get('/movimientos/:id', listarMovimientosEmpleado);
+
 
 
 

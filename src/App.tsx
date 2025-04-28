@@ -5,6 +5,7 @@ import { ConsultaEmpleado } from './pages/consultaEmpleado';
 import { CrearEmpleado } from './pages/crearEmpleado';
 import { EditarEmpleado } from './pages/editarEmpleado';
 import { Login } from './pages/login';
+import { ListarMovimientosEmpleado } from './pages/listarMovimientosEmpleado';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="empleado/modificacion/:id" element={<EditarEmpleado/>} />
             <Route path="/empleado/crear_empleado" element={<CrearEmpleado/>} />
             <Route path="/login" element={<Login/>} />
+            <Route path="/empleado/listar_movimientos/:id" element={<ListarMovimientosEmpleado />} />
         </Routes>
     </BrowserRouter>
 );

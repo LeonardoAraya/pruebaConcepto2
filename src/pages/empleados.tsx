@@ -102,9 +102,9 @@ export const Empleados = () => {
             }
     
             const res = await fetch(url, {
-                method: 'POST', // Cambiar según lo que necesites (GET/POST)
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: usuario }) // Enviar el username aquí también
+                body: JSON.stringify({ username: usuario })
             });
     
             if (!res.ok) throw new Error(await res.text());

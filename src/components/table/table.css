@@ -28,12 +28,14 @@
 .table th:nth-child(4),
 .table th:nth-child(5),
 .table th:nth-child(6),
+.table th:nth-child(7),
 .table td:nth-child(2),
 .table td:nth-child(3),
 .table td:nth-child(4),
 .table td:nth-child(5),
-.table td:nth-child(6) {
-    width: 16%; /* Ajuste proporcional */
+.table td:nth-child(6),
+.table td:nth-child(7) {
+    width: 14%; /* Ajuste proporcional */
 }
 
 .table td:nth-child(1),
@@ -41,6 +43,7 @@
 .table td:nth-child(3),
 .table td:nth-child(4),
 .table td:nth-child(5),
-.table td:nth-child(6) {
+.table td:nth-child(6),
+.table td:nth-child(7) {
     background-color: #ffffff; /* Color de fondo del encabezado */
 }

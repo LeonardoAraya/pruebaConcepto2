@@ -192,6 +192,22 @@ export async function filtrarEmpleadoPorCedula(req: Request, res: Response) {
     }
 }
 
+export async function listarMovimientosEmpleado(req: Request, res: Response) {
+    const { id } = req.params;
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('inIdEmpleado', sql.Int, id)
+            .execute('SP_ObtenerMovimientosPorEmpleado');
+
+        res.json(result.recordset);
+    } catch (error) {
+        console.error('Error al listar movimientos:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+}
+
+
 
 
 
