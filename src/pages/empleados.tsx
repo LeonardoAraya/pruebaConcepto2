@@ -40,6 +40,8 @@ export const Empleados = () => {
     ]);
 
     const handleEliminar = async (empleado: Empleado) => {
+        const usuario = localStorage.getItem('usuario'); // Obtener el usuario desde localStorage
+    
         const result = await Swal.fire({
             title: '¿Está seguro?',
             html: `
@@ -56,13 +58,16 @@ export const Empleados = () => {
         if (result.isConfirmed) {
             try {
                 const res = await fetch(`http://localhost:5000/api/empleados/${empleado.id_empleado}?nombre=${encodeURIComponent(empleado.nombre)}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: usuario })
                 });
+                
     
                 if (!res.ok) throw new Error(await res.text());
     
                 await Swal.fire('Eliminado', 'El empleado fue eliminado correctamente.', 'success');
-                setEmpleados(prev => prev.filter(e => e.id_empleado !== empleado.id_empleado));
+                setEmpleados((prev) => prev.filter((e) => e.id_empleado !== empleado.id_empleado));
             } catch (error) {
                 console.error('Error al eliminar empleado:', error);
                 Swal.fire('Error', 'Ocurrió un error al eliminar el empleado.', 'error');
@@ -71,26 +76,37 @@ export const Empleados = () => {
     };
 
     const handleFiltrar = async () => {
+        const usuario = localStorage.getItem('usuario'); // Obtener el usuario desde localStorage
+    
         if (!filtro.trim()) {
-            fetch('http://localhost:5000/api/empleados') //llamar a la API de empleados
-            .then(response => response.json()) //convertir a JSON
-            .then(data => setEmpleados(data)) //almacenar en la variable empleados
-            .catch(error => console.error('Error al obtener empleados:', error));
+            fetch('http://localhost:5000/api/empleados', {
+                method: 'POST', // Repetimos la lógica del fetch inicial
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: usuario }) // Enviar el username
+            })
+                .then((response) => response.json())
+                .then((data) => setEmpleados(data))
+                .catch((error) => console.error('Error al obtener empleados:', error));
             return;
         }
     
-        const soloNumeros = /^[0-9]+$/.test(filtro.trim()); // Validar si es numérico (solo dígitos)
+        const soloNumeros = /^[0-9]+$/.test(filtro.trim()); // Validar si es numérico
     
         try {
             let url = '';
     
-            if (soloNumeros) { //si solo son números, filtrar por id
+            if (soloNumeros) {
                 url = `http://localhost:5000/api/empleados/filtrarPorId/${filtro}`;
-            } else { //si no son números, filtrar por nombre
+            } else {
                 url = `http://localhost:5000/api/empleados/filtrarPorNombre/${encodeURIComponent(filtro)}`;
             }
     
-            const res = await fetch(url); //hacer fetch a la API
+            const res = await fetch(url, {
+                method: 'POST', // Cambiar según lo que necesites (GET/POST)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: usuario }) // Enviar el username aquí también
+            });
+    
             if (!res.ok) throw new Error(await res.text());
     
             const data = await res.json();
@@ -104,7 +120,7 @@ export const Empleados = () => {
 
     return (
         <>
-            <Header textRight="Prueba Concepto 2" logoSrc={logo} logoLink="/empleados" />
+            <Header textRight="Prueba Concepto 2" logoSrc={logo} logoLink="/empleados" showLogoutButton={true} />
             <Footer text="© 2025 Todos los derechos reservados" />
             <div className='abajo-header'>
                 <h2>Empleados</h2>

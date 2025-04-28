@@ -77,7 +77,7 @@ export const EditarEmpleado = () => {
 
             Swal.fire({
                 title: "Éxito",
-                text: "Empleado insertado correctamente",
+                text: "Empleado editado correctamente",
                 icon: "success"
             });
             navigate('/empleados');

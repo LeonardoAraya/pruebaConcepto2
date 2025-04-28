@@ -5,7 +5,6 @@ const empleadosRoutes = require('./routes/empleados.routes'); //rutas de la API 
 const loginRoutes = require('./routes/login.routes'); //rutas de la API de proyectos
 
 
-
 const app = express(); //crear app Express (framework para crear servidores y APIs)
 
 // Middlewares

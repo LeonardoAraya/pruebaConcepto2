@@ -37,6 +37,8 @@ export const CrearEmpleado = () => {
             return date.toISOString().split("T")[0];
         };
     
+        const usuario = localStorage.getItem('usuario'); // Obtener el username desde localStorage
+    
         const empleado = {
             idPuesto: parseInt(idPuesto),
             valorDocumentoIdentidad: valorDocumentoIdentity,
@@ -44,24 +46,24 @@ export const CrearEmpleado = () => {
             fechaContratacion: formatDate(fechaContratacion),
             saldoVacaciones: parseFloat(saldoVacaciones),
             activo: activo,
-            username: 'sistema'
+            username: usuario
         };
     
         try {
             const res = await fetch('http://localhost:5000/api/empleados', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(empleado)
+                body: JSON.stringify(empleado) // Enviamos el objeto empleado con el username
             });
     
             if (!res.ok) {
-                const errorResponse = await res.json(); // Lee el error desde el response JSON
-                throw new Error(errorResponse.error); // Lanza el error con el mensaje del backend
+                const errorResponse = await res.json();
+                throw new Error(errorResponse.error);
             }
     
             Swal.fire({
                 title: "Éxito",
-                text: "Empleado insertado correctamente",
+                text: "Empleado creado correctamente",
                 icon: "success"
             });
             navigate('/empleados');
@@ -69,7 +71,7 @@ export const CrearEmpleado = () => {
             console.error('Error al insertar empleado:', error);
             Swal.fire({
                 title: "Error",
-                text: error.message, // Muestra el mensaje detallado del backend
+                text: error.message,
                 icon: "error"
             });
         }
@@ -122,8 +124,8 @@ export const CrearEmpleado = () => {
                     <label>Activo:
                     <Select value={activo} onChange={(e) => setActivo(e.target.value)}
                         options={[
-                            { value: 'SI', label: 'Sí' }, //Value es el valor que se guarda, label es el que se muestra
-                            { value: 'NO', label: 'No' }
+                            { value: '1', label: 'Sí' }, //Value es el valor que se guarda, label es el que se muestra
+                            { value: '2', label: 'No' }
                         ]}
                         required
                         />

@@ -49,7 +49,8 @@ export async function crearEmpleado(req: Request, res: Response) {
             nombre,
             fechaContratacion,
             saldoVacaciones,
-            activo
+            activo,
+            username
         } = req.body;
 
         const pool = await poolPromise; // Obtener conexión a la base de datos
@@ -60,7 +61,7 @@ export async function crearEmpleado(req: Request, res: Response) {
             .input('inFechaContratacion', sql.Date, fechaContratacion)
             .input('inSaldoVacaciones', sql.Decimal(12, 2), saldoVacaciones)
             .input('inActivo', sql.VarChar(4), activo)
-            .input('inUsername', sql.VarChar(64), 'sistema') // Usuario del sistema
+            .input('inUsername', sql.VarChar(64), username) // Usuario del sistema
             .execute('SP_InsertarEmpleado'); // Ejecuta el procedimiento almacenado
 
         console.log('Resultado de la inserción:', result);
@@ -95,7 +96,8 @@ export async function actualizarEmpleado(req: Request, res: Response) {
         nombre,
         fechaContratacion,
         saldoVacaciones,
-        activo
+        activo,
+        username
     } = req.body;
 
     try {
@@ -108,7 +110,7 @@ export async function actualizarEmpleado(req: Request, res: Response) {
             .input('inFechaContratacion', sql.Date, fechaContratacion)
             .input('inSaldoVacaciones', sql.Decimal(12, 2), saldoVacaciones)
             .input('inActivo', sql.VarChar(4), activo)
-            .input('inUsername', sql.VarChar(64), 'sistema')
+            .input('inUsername', sql.VarChar(64), username)
             .execute('SP_ActualizarEmpleadoPorID'); // Ejecuta el procedimiento almacenado
 
         console.log('Resultado de la actualización:', result);
@@ -134,15 +136,17 @@ export async function actualizarEmpleado(req: Request, res: Response) {
 }
 
 export async function eliminarEmpleado(req: Request, res: Response) {
-    const { id } = req.params; //obtener el id del empleado
+    const { id } = req.params; // Obtener el id del empleado
     const { nombre } = req.query;
+    const { username } = req.body; // Obtener el username del body
 
     try {
+
         const pool = await poolPromise; // Obtener la conexión a la base de datos
         await pool.request()
             .input('inIdEmpleado', sql.Int, id)
             .input('inNombre', sql.VarChar(64), nombre)
-            .input('inUsername', sql.VarChar(64), 'sistema')
+            .input('inUsername', sql.VarChar(64), username)
             .execute('SP_BorrarEmpleado');
 
         res.status(200).json({ mensaje: 'Empleado eliminado' });
@@ -154,12 +158,13 @@ export async function eliminarEmpleado(req: Request, res: Response) {
 
 export async function filtrarEmpleadoPorNombre(req: Request, res: Response) {
     const { nombre } = req.params;
+    const { username } = req.body;
 
     try {
         const pool = await poolPromise;
         const result = await pool.request()
             .input('inNombre', sql.VarChar(64), nombre)
-            .input('inUsername', sql.VarChar(64), 'sistema')
+            .input('inUsername', sql.VarChar(64), username)
             .execute('SP_FiltrarEmpleadoPorNombre');
 
         res.json(result.recordset);
@@ -171,12 +176,13 @@ export async function filtrarEmpleadoPorNombre(req: Request, res: Response) {
 
 export async function filtrarEmpleadoPorCedula(req: Request, res: Response) {
     const { cedula } = req.params;
+    const { username } = req.body; // Obtener el username del body
 
     try {
         const pool = await poolPromise;
         const result = await pool.request()
             .input('inCedulaEmpleado', sql.VarChar(64), cedula)
-            .input('inUsername', sql.VarChar(64), 'sistema')
+            .input('inUsername', sql.VarChar(64), username)
             .execute('SP_FiltrarEmpleadoPorDocumento_Identidad');
 
         res.json(result.recordset);

@@ -6,10 +6,11 @@ const router = Router(); //crear el router
 router.get('/', getEmpleados); //crear ruta GET, / representa el inicio, en este caso /api/empleados
 router.get('/puestos', getPuestos); //crear ruta GET, / representa el inicio, en este caso /api/empleados
 router.get('/:id', getEmpleadoPorId); //crear ruta GET, / representa el inicio, en este caso /api/empleados
-router.get('/filtrarPorNombre/:nombre', filtrarEmpleadoPorNombre);
-router.get('/filtrarPorId/:cedula', filtrarEmpleadoPorCedula);
 
 
+
+router.post('/filtrarPorNombre/:nombre', filtrarEmpleadoPorNombre);
+router.post('/filtrarPorId/:cedula', filtrarEmpleadoPorCedula);
 router.post('/', crearEmpleado); //crear ruta POST, / representa el inicio, en este caso /api/empleados
 
 router.put('/:id', actualizarEmpleado);
