@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Footer, Header, Table } from '../components';
+import { Footer, Header, Table, Button } from '../components';
 import logo from '../assets/home.png';
 
 interface Movimiento {
@@ -24,6 +25,8 @@ export const ListarMovimientosEmpleado = () => {
     const [empleado, setEmpleado] = useState<Empleado | null>(null);
     const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
 
+    const navigate = useNavigate();
+
     const formatUTCDate = (dateString: string): string => {
         const date = new Date(dateString);
         if (isNaN(date.getTime())) return 'Fecha inválida';
@@ -44,7 +47,7 @@ export const ListarMovimientosEmpleado = () => {
         const seconds = String(date.getUTCSeconds()).padStart(2, '0');
         return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     };
-    
+
     useEffect(() => {
         // Obtener datos del empleado
         fetch(`http://localhost:5000/api/empleados/${id}`)
@@ -83,17 +86,32 @@ export const ListarMovimientosEmpleado = () => {
         <>
             <Header textRight="Prueba Concepto 2" logoSrc={logo} logoLink="/empleados" showLogoutButton={true} />
             <Footer text="© 2025 Todos los derechos reservados" />
-            <div className="container">
-                <h1>Movimientos del Empleado</h1>
-                <div className="detalle-empleado">
-                    <p><strong>Nombre:</strong> {empleado.nombre}</p>
-                    <p><strong>Documento de Identidad:</strong> {empleado.valor_documento_identidad}</p>
-                    <p><strong>Saldo Actual de Vacaciones:</strong> {empleado.saldo_vacaciones}</p>
+    
+            <div className="abajo-header">
+                <h2>Movimientos del Empleado</h2>
+    
+                <div className="boton-crear">
+                    <Button
+                        label="Agregar Movimiento"
+                        parentMethod={() => navigate(`/empleado/crear_movimiento/${id}`)}
+                        className="boton-verde"
+                    />
                 </div>
+            </div>
+
+            <div className="detalle-empleado">
+                <p><strong>Nombre:</strong> {empleado.nombre}</p>
+                <p><strong>Documento de Identidad:</strong> {empleado.valor_documento_identidad}</p>
+                <p><strong>Saldo Actual de Vacaciones:</strong> {empleado.saldo_vacaciones}</p>
+            </div>
+    
+            <div className="container">
                 <div className="table-container">
                     <Table headers={headers} rows={rows} />
                 </div>
             </div>
         </>
     );
+    
 };
+

@@ -79,14 +79,10 @@ export const Empleados = () => {
         const usuario = localStorage.getItem('usuario'); // Obtener el usuario desde localStorage
     
         if (!filtro.trim()) {
-            fetch('http://localhost:5000/api/empleados', {
-                method: 'POST', // Repetimos la lógica del fetch inicial
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: usuario }) // Enviar el username
-            })
-                .then((response) => response.json())
-                .then((data) => setEmpleados(data))
-                .catch((error) => console.error('Error al obtener empleados:', error));
+            fetch('http://localhost:5000/api/empleados') //llamar a la API de empleados
+            .then(response => response.json()) //convertir a JSON
+            .then(data => setEmpleados(data)) //almacenar en la variable empleados
+            .catch(error => console.error('Error al obtener empleados:', error));
             return;
         }
     

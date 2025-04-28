@@ -16,6 +16,7 @@
     border: 1px solid #000000; /* bordes de la celda */
     padding: 8px; /* espacio interno */
     text-align: center; /* alinea el texto centrado */
+    width: 16%;
 }
 
 .table th { /* encabezados de la tabla */
@@ -23,20 +24,6 @@
     color:white; /* color del texto */
 }
 
-.table th:nth-child(2),
-.table th:nth-child(3),
-.table th:nth-child(4),
-.table th:nth-child(5),
-.table th:nth-child(6),
-.table th:nth-child(7),
-.table td:nth-child(2),
-.table td:nth-child(3),
-.table td:nth-child(4),
-.table td:nth-child(5),
-.table td:nth-child(6),
-.table td:nth-child(7) {
-    width: 14%; /* Ajuste proporcional */
-}
 
 .table td:nth-child(1),
 .table td:nth-child(2),
@@ -45,5 +32,5 @@
 .table td:nth-child(5),
 .table td:nth-child(6),
 .table td:nth-child(7) {
-    background-color: #ffffff; /* Color de fondo del encabezado */
+    background-color: #ffffff;
 }

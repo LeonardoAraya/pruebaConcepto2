@@ -96,11 +96,15 @@ export const CrearEmpleado = () => {
                     <label>Documento de Identidad:
                         <Input
                             value={valorDocumentoIdentity}
-                            onChange={(e) => setValorDocumentoIdentity(e.target.value)}
+                            onChange={(e) => {
+                                const onlyNumbers = e.target.value.replace(/\D/g, ''); // quita todo lo que no sea dígito
+                                setValorDocumentoIdentity(onlyNumbers);
+                            }}
                             placeholder="Ej: 123456789"
-                            isRequired = {true}
+                            isRequired={true}
                         />
                     </label>
+
 
                     <label>Fecha de Contratación:
                         <Input

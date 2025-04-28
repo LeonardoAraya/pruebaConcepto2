@@ -3,7 +3,7 @@ const cors = require('cors'); //permite la comunicación entre puertos
 const path = require('path');  //construir rutas de archivos
 const empleadosRoutes = require('./routes/empleados.routes'); //rutas de la API de proyectos
 const loginRoutes = require('./routes/login.routes'); //rutas de la API de proyectos
-
+const movimientosRoutes = require('./routes/movimientos.routes'); //rutas de la API de proyectos
 
 const app = express(); //crear app Express (framework para crear servidores y APIs)
 
@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, '..', 'src', 'assets'))); //ruta de 
 // Rutas de API
 app.use('/api/empleados', empleadosRoutes); //ruta de la API de empleados
 app.use('/api/login', loginRoutes); //ruta de la API de login
+app.use('/api/movimientos', movimientosRoutes); //ruta de la API de movimientos
 
 // Rutas HTML
 app.get('/', (req: Request, res: Response) => {
