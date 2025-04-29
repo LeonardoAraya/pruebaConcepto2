@@ -4,12 +4,9 @@ import { getEmpleados, getEmpleadoPorId, getPuestos, crearEmpleado, actualizarEm
 const router = Router(); //crear el router
 
 router.get('/', getEmpleados); //crear ruta GET, / representa el inicio, en este caso /api/empleados
-router.get('/puestos', getPuestos); //crear ruta GET, / representa el inicio, en este caso /api/empleados
-router.get('/:id', getEmpleadoPorId); //crear ruta GET, / representa el inicio, en este caso /api/empleados
+router.get('/puestos', getPuestos);
+router.get('/:id', getEmpleadoPorId);
 router.get('/movimientos/:id', listarMovimientosEmpleado);
-
-
-
 
 router.post('/filtrarPorNombre/:nombre', filtrarEmpleadoPorNombre);
 router.post('/filtrarPorId/:cedula', filtrarEmpleadoPorCedula);
